@@ -24,10 +24,8 @@ class Blockchain(object):
     def genesis_block(self):
         """
         Create the genesis block and add it to the chain
-
         The genesis block is the anchor of the chain.  It must be the
         same for all nodes, or their chains will fail consensus.
-
         It is normally hard-coded
         """
         block = {
@@ -43,7 +41,6 @@ class Blockchain(object):
     def new_block(self, proof, previous_hash):
         """
         Create a new Block in the Blockchain
-
         :param proof: <int> The proof given by the Proof of Work algorithm
         :param previous_hash: (Optional) <str> Hash of previous Block
         :return: <dict> New Block
@@ -66,7 +63,6 @@ class Blockchain(object):
     def add_block(self, block):
         """
         Add a received Block to the end of the Blockchain
-
         :param block: <Block> The validated Block sent by another node in the
         network
         """
@@ -80,7 +76,6 @@ class Blockchain(object):
     def new_transaction(self, sender, recipient, amount):
         """
         Creates a new transaction to go into the next mined Block
-
         :param sender: <str> Address of the Recipient
         :param recipient: <str> Address of the Recipient
         :param amount: <int> Amount
@@ -99,7 +94,6 @@ class Blockchain(object):
     def hash(block):
         """
         Creates a SHA-256 hash of a Block
-
         :param block": <dict> Block
         "return": <str>
         """
@@ -141,7 +135,6 @@ class Blockchain(object):
     def valid_chain(self, chain):
         """
         Determine if a given blockchain is valid
-
         :param chain: <list> A blockchain
         :return: <bool> True if valid, False if not
         """
@@ -248,13 +241,13 @@ def mine():
     last_proof = last_block['proof']
 
     values = request.get_json()
-    submitted_proof = values.get('proof')
+    submitted_proof = values.get('proof', 'id')
 
     if blockchain.valid_proof(last_proof, submitted_proof):
         # We must receive a reward for finding the proof.
         # The sender is "0" to signify that this node has mine a new coin
         blockchain.new_transaction(
-            sender="0",
+            sender=submitted_proof.id,
             recipient=node_identifier,
             amount=1,
         )
